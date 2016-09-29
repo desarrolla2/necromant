@@ -13,15 +13,15 @@ bin/necromancer execute your-command-here
 or get more info running:
 
 ```shell
-╰─$ bin/necromancer execute --help
+╰─$ bin/necromancer execute --help                                                                                                                                                                             1 ↵
 Usage:
-  execute <process> [<time>] [<times>]
+  execute <process> [<cwd>] [<time>] [<times>]
 
 Arguments:
   process               Who do you want to supervise?
+  cwd                   The working directory or null to use the working dir of the current process
   time                  How long do you want to wait to restart [default: 10]
-  times                 How many times you want the process to restart, 
-zero for infinite times [default: 10]
+  times                 How many times you want the process to restart, zero for infinite times [default: 10]
 
 Options:
   -h, --help            Display this help message
@@ -30,6 +30,6 @@ Options:
       --ansi            Force ANSI output
       --no-ansi         Disable ANSI output
   -n, --no-interaction  Do not ask any interactive question
-  -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more 
-  verbose output and 3 for debug
+  -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 
+  3 for debug
 ```
