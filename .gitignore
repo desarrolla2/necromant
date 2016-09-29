@@ -1,0 +1,7 @@
+/vendor
+/bin/*
+!/bin/compile
+!/bin/necromancer.phar
+composer.phar
+composer.lock
+phpunit.xml
