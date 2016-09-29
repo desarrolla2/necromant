@@ -18,7 +18,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-
 /**
  * DefaultCommand
  */
@@ -51,14 +50,33 @@ class DefaultCommand extends Command
 
     protected function configure()
     {
-        $this->setName('execute')
-            ->addArgument('process', InputArgument::REQUIRED, 'Who do you want to supervise?')
-            ->addArgument('time', InputArgument::OPTIONAL, 'How long do you want to wait to restart', 10)
-            ->addArgument('times', InputArgument::OPTIONAL, 'How many times you want the process to restart, 
-zero for infinite times', 10);
-
         declare(ticks = 1);
         pcntl_signal(SIGINT, [$this, 'handleSignal']);
+
+        $this->setName('execute')
+            ->addArgument(
+                'process',
+                InputArgument::REQUIRED,
+                'Who do you want to supervise?'
+            )
+            ->addArgument(
+                'cwd',
+                InputArgument::OPTIONAL,
+                'The working directory or null to use the working dir of the current process',
+                null
+            )
+            ->addArgument(
+                'time',
+                InputArgument::OPTIONAL,
+                'How long do you want to wait to restart',
+                10
+            )
+            ->addArgument(
+                'times',
+                InputArgument::OPTIONAL,
+                'How many times you want the process to restart, zero for infinite times',
+                10
+            );
     }
 
     /**
@@ -69,12 +87,13 @@ zero for infinite times', 10);
     {
         $this->output = $output;
         $this->processName = $input->getArgument('process');
+        $cwd = $input->getArgument('cwd');
         $this->time = $input->getArgument('time');
         $times = $input->getArgument('times');
         $step = 0;
         while (($step <= $times | $times == 0) && $this->signal == 0) {
             $output->writeln(sprintf('Starting execution of `%s`', $this->processName));
-            $this->process = new Process($this->processName);
+            $this->process = new Process($this->processName, $cwd);
             $this->process->setTimeout(null);
             $this->process->setIdleTimeout(null);
             $this->process->run(
@@ -87,7 +106,7 @@ zero for infinite times', 10);
                 }
             );
             $this->process->stop();
-            $output->writeln(sprintf('Whoooos! `%s` is terminated', $this->processName));
+            $output->writeln(sprintf('`%s` is terminated', $this->processName));
             $this->wait($this->time);
             $step++;
         }

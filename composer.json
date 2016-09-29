@@ -1,5 +1,5 @@
 {
-    "name": "desarrolla2/necromancer",
+    "name": "necromancer/necromancer",
     "autoload": {
         "psr-4": {"Necromancer\\": "src/"}
     },
